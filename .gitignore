@@ -2,3 +2,4 @@ node_modules
 /uploads
 .env
 agritech-conference-445700-07ad4713701a.json
+.vercel
