@@ -6,11 +6,9 @@ const fs = require("fs");
 
 require("dotenv").config();
 
-const googleKeyBase64 = process.env.GOOGLE_KEY_FILE;
+const GOOGLE_KEY_FILE = process.env.GOOGLE_KEY_FILE;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
-
-const googleKey = Buffer.from(googleKeyBase64, 'base64').toString('utf8');
 
 const app = express();
 const upload = multer({ dest: "uploads/" }); // Temporary storage for uploaded files
@@ -25,7 +23,7 @@ const SCOPES = [
   "https://www.googleapis.com/auth/spreadsheets",
 ];
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(googleKey), // Path to your Google service account JSON key
+  keyFile: GOOGLE_KEY_FILE, // Path to your Google service account JSON key
   scopes: SCOPES,
 });
 const drive = google.drive({ version: "v3", auth });
