@@ -13,7 +13,15 @@ const GDRIVE_FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 const app = express();
 const upload = multer({ dest: "uploads/" }); // Temporary storage for uploaded files
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://agritech.greysoft.ng',  // Allow your frontend domain
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));  // Enable CORS for all routes
+app.options('*', cors(corsOptions)); 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -75,7 +83,13 @@ const appendToSheet = async (sheetName, data) => {
 
 app.post(
   "/submit",
-  upload.fields([{ name: "paperFile" }, { name: "supplementary" }, { name: "resume" }, { name: "porfolio" }, { name: "logo" }]),
+  upload.fields([
+    { name: "paperFile" },
+    { name: "supplementary" },
+    { name: "resume" },
+    { name: "porfolio" },
+    { name: "logo" },
+  ]),
   async (req, res) => {
     try {
       const { body, files } = req;
@@ -95,33 +109,29 @@ app.post(
       const porfolioLink = files.porfolio
         ? await uploadToDrive(files.porfolio[0])
         : "";
-        
-      const logoLink = files.logo
-        ? await uploadToDrive(files.logo[0])
-        : "";
 
-          console.log(logoLink);
-                
-         
+      const logoLink = files.logo ? await uploadToDrive(files.logo[0]) : "";
+
+      console.log(logoLink);
+
       const formData = Object.values(body);
       formData.shift();
-          
-      if(sheetName === 'Papers'){
-        formData.splice(12, 0, paperFileLink); 
+
+      if (sheetName === "Papers") {
+        formData.splice(12, 0, paperFileLink);
         formData.splice(13, 0, supplementaryLink);
       }
-      if (sheetName === 'BootcampApplicants') {
-        formData.splice(12, 0, resumeLink); 
+      if (sheetName === "BootcampApplicants") {
+        formData.splice(12, 0, resumeLink);
         formData.splice(13, 0, porfolioLink);
       }
-      if (sheetName === 'Partners') {
-        formData.splice(5, 0, logoLink); 
+      if (sheetName === "Partners") {
+        formData.splice(5, 0, logoLink);
       }
-   
-      
+
       // Insert the new values at the specific indices
       console.log(formData);
-      
+
       // Prepare data for Google Sheets
       const sheetData = formData;
 
