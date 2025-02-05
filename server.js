@@ -104,8 +104,8 @@ const checkIfEmailExists = async (sheetName, email) => {
     });
 
     const rows = response.data.values;
-    console.log("Checking email:", email);
-    console.log("Rows in sheet:", rows);
+    // console.log("Checking email:", email);
+    // console.log("Rows in sheet:", rows);
     if (rows && rows.length > 0) {
       // Check if the email exists in the column
       return rows.some((row) => row[0] === email);
@@ -148,7 +148,7 @@ app.post(
       const successMsg = successMessages[sheetName] || "Submission successful!";
 
       const email = body.email; // Assuming the email is part of the form data
-      console.log("This is a body something", body);
+      // console.log("This is a body something", body);
 
       // Check if the email already exists in the sheet
       const emailExists = await checkIfEmailExists(sheetName, email);
@@ -176,7 +176,7 @@ app.post(
 
       const logoLink = files.logo ? await uploadToDrive(files.logo[0]) : "";
 
-      console.log(logoLink);
+      // console.log(logoLink);
 
       const formData = Object.values(body);
       formData.shift();
