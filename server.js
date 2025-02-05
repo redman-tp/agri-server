@@ -15,7 +15,8 @@ const upload = multer({ dest: "uploads/" }); // Temporary storage for uploaded f
 
 const corsOptions = {
   // origin: "*",
-  origin: ['http://localhost:9001', 'https://agritech.greysoft.ng'],
+  // origin: ['http://localhost:9001', 'https://agritech.greysoft.ng'],
+  origin: ['https://agritech.greysoft.ng'],
   methods: ["GET", "POST"],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 };
